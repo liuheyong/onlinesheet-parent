@@ -9,10 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description
  */
 @SpringBootApplication
-public class EcsheetApplication {
+public class OnlineSheetApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EcsheetApplication.class, args);
+        SpringApplication.run(OnlineSheetApplication.class, args);
     }
-
 }

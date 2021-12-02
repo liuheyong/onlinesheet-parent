@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  * @description
  */
 @Repository
-public interface WorkBookRepository extends MongoRepository<WorkBookEntity,String> {
+public interface WorkBookRepository extends MongoRepository<WorkBookEntity, String> {
 }

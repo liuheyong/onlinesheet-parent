@@ -31,9 +31,8 @@ public class PakoGzipUtils {
         return out.toString("ISO-8859-1");
     }
 
-
     /**
-     * @param str：类型为：  ³)°K,NIc i£_`Çe#  c¦%ÂXHòjyIÅÖ`
+     * @param str：类型为：  ³)°K,NIc i£_`Çe#  c¦%ÂXHòjyIÅÖ`
      * @return 解压字符串  生成正常字符串。
      * @throws IOException
      */
@@ -58,21 +57,20 @@ public class PakoGzipUtils {
      * @return 生成正常字符串
      * @throws IOException
      */
-    public static String  unCompressURI(String jsUriStr) throws IOException {
-        String gzipCompress=uncompress(jsUriStr);
-        String result=URLDecoder.decode(gzipCompress,"UTF-8");
-
+    public static String unCompressURI(String jsUriStr) throws IOException {
+        String gzipCompress = uncompress(jsUriStr);
+        String result = URLDecoder.decode(gzipCompress, "UTF-8");
         return result;
     }
+
     /**
      * @param strData :字符串类型为： 正常字符串
      * @return 生成字符串类型为：%1F%C2%8B%08%00%00%00%00%00%00%03%C2%B3)%C2%B0K%2CNI%03c%20i%C2%A3_%60%C3%87e%03%11%23%C2%82%0Dc%C2%A6%25%C3%82XH%C3%B2jyI%C3%85%05%C3%96%60%1E%00%17%C2%8E%3Dvf%00%00%00
      * @throws IOException
      */
-    public static String  compress2URI(String strData) throws IOException {
-        String encodeGzip=compress(strData);
-        String jsUriStr=URLEncoder.encode(encodeGzip,"UTF-8");
+    public static String compress2URI(String strData) throws IOException {
+        String encodeGzip = compress(strData);
+        String jsUriStr = URLEncoder.encode(encodeGzip, "UTF-8");
         return jsUriStr;
     }
-
 }

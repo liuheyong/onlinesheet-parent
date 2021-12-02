@@ -1,7 +1,5 @@
 package com.mars.ecsheet.service.impl;
 
-import cn.hutool.core.util.EscapeUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
@@ -27,10 +25,8 @@ import java.util.Optional;
 @Service
 public class MessageProcess implements IMessageProcess {
 
-
     @Autowired
     private WorkSheetRepository workSheetRepository;
-
     @Autowired
     private WorkBookRepository workBookRepository;
 
@@ -45,19 +41,15 @@ public class MessageProcess implements IMessageProcess {
         if ("shc".equals(action)) {
             index = message.getJSONObject("v").getStr("copyindex");
         }
-
         //如果是删除sheet，index的值需要另取
         if ("shd".equals(action)) {
             index = message.getJSONObject("v").getStr("deleIndex");
         }
-
         //如果是恢复sheet，index的值需要另取
         if ("shre".equals(action)) {
             index = message.getJSONObject("v").getStr("reIndex");
         }
-
         WorkSheetEntity ws = workSheetRepository.findByindexAndwbId(index, wbId);
-
         switch (action) {
             //单个单元格刷新
             case "v":
@@ -134,7 +126,6 @@ public class MessageProcess implements IMessageProcess {
             return;
         }
         workSheetRepository.save(ws);
-
     }
 
     /**
@@ -158,7 +149,6 @@ public class MessageProcess implements IMessageProcess {
             });
         } else {
             JSONObject collectData = JSONUtil.createObj().put("r", message.getLong("r")).put("c", message.getLong("c")).put("v", message.getJSONObject("v"));
-
             List<String> flag = new ArrayList<>();
             celldata.forEach(c -> {
                 JSONObject jsonObject = JSONUtil.parseObj(c);
@@ -176,7 +166,6 @@ public class MessageProcess implements IMessageProcess {
         }
         return ws;
     }
-
 
     /**
      * 范围单元格刷新
@@ -203,7 +192,6 @@ public class MessageProcess implements IMessageProcess {
                 int columnIndex = ci;
                 celldata.forEach(cell -> {
                     JSONObject jsonObject = JSONUtil.parseObj(cell);
-
                     if (!jsonObject.isEmpty()) {
                         if (jsonObject.getInt("r") == rowIndex && jsonObject.getInt("c") == columnIndex) {
                             if ("null".equals(newCell.toString()) || JSONUtil.parseObj(newCell).isEmpty()) {
@@ -224,11 +212,8 @@ public class MessageProcess implements IMessageProcess {
             }
             countRowIndex++;
         }
-
-
         return ws;
     }
-
 
     /**
      * config更新
@@ -245,10 +230,8 @@ public class MessageProcess implements IMessageProcess {
         } else {
             ws.getData().getJSONObject("config").put(message.getStr("k"), v);
         }
-
         return ws;
     }
-
 
     /**
      * 通用保存
@@ -262,14 +245,13 @@ public class MessageProcess implements IMessageProcess {
         if (temp.isEmpty()) {
             ws.getData().remove(message.getStr("k"));
         } else {
-            if(JSONUtil.isJson(temp)){
+            if (JSONUtil.isJson(temp)) {
                 ws.getData().put(message.getStr("k"), message.getJSONObject("v"));
             }
             ws.getData().put(message.getStr("k"), temp);
         }
         return ws;
     }
-
 
     /**
      * 函数链操作
@@ -294,7 +276,6 @@ public class MessageProcess implements IMessageProcess {
         }
         return ws;
     }
-
 
     /**
      * 删除行或列
@@ -338,10 +319,8 @@ public class MessageProcess implements IMessageProcess {
                 }
             }
         }
-
         return ws;
     }
-
 
     /**
      * 增加行或列,暂未实现插入数据的情况
@@ -370,8 +349,6 @@ public class MessageProcess implements IMessageProcess {
                     jsonObject.put("r", jsonObject.getInt("r") + len);
                     ws.getData().getJSONArray("celldata").add(jsonObject);
                 }
-
-
             } else {
                 //如果是增加列，且是向上增加
                 if (jsonObject.getInt("c") >= index && "lefttop".equals(message.getJSONObject("v").getStr("direction"))) {
@@ -413,11 +390,8 @@ public class MessageProcess implements IMessageProcess {
                 }
             }
         }
-
-
         return ws;
     }
-
 
     /**
      * 筛选操作
@@ -427,7 +401,6 @@ public class MessageProcess implements IMessageProcess {
      * @return
      */
     private WorkSheetEntity fscRefresh(WorkSheetEntity ws, JSONObject message) {
-
         if (message.getJSONObject("v").isEmpty()) {
             ws.getData().remove("filter");
             ws.getData().remove("filter_select");
@@ -437,7 +410,6 @@ public class MessageProcess implements IMessageProcess {
         }
         return ws;
     }
-
 
     /**
      * 新建sheet
@@ -453,7 +425,6 @@ public class MessageProcess implements IMessageProcess {
         return ws;
     }
 
-
     /**
      * 复制sheet
      *
@@ -462,11 +433,9 @@ public class MessageProcess implements IMessageProcess {
      * @return
      */
     private WorkSheetEntity shcRefresh(WorkSheetEntity ws, JSONObject message) {
-
         String index = message.getStr("i");
         ws.getData().put("index", index);
         ws.getData().put("name", message.getJSONObject("v").getStr("name"));
-
         return ws;
     }
 
@@ -478,7 +447,6 @@ public class MessageProcess implements IMessageProcess {
      */
     private void shrRefresh(String wbId, JSONObject message) {
         List<WorkSheetEntity> allSheets = workSheetRepository.findAllBywbId(wbId);
-
         allSheets.forEach(sheet -> {
             sheet.getData().put("order", message.getJSONObject("v").getInt(sheet.getData().getStr("index")));
             workSheetRepository.save(sheet);
@@ -502,7 +470,6 @@ public class MessageProcess implements IMessageProcess {
         workSheetRepository.save(thisWs);
     }
 
-
     /**
      * sheet属性(隐藏或显示)
      *
@@ -525,7 +492,6 @@ public class MessageProcess implements IMessageProcess {
             curWs = workSheetRepository.findBystatusAndwbId(1, ws.getWbId());
             curWs.getData().put("status", 0);
         }
-
         workSheetRepository.save(curWs);
         return ws;
     }
@@ -545,6 +511,4 @@ public class MessageProcess implements IMessageProcess {
             workBookRepository.save(workBookEntity);
         }
     }
-
-
 }

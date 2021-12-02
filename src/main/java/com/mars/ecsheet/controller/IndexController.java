@@ -1,6 +1,5 @@
 package com.mars.ecsheet.controller;
 
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.mars.ecsheet.entity.WorkBookEntity;
@@ -32,17 +31,14 @@ public class IndexController {
 
     @Autowired
     private WorkBookRepository workBookRepository;
-
     @Autowired
     private WorkSheetRepository workSheetRepository;
 
     @GetMapping("index")
     public ModelAndView index() {
         List<WorkBookEntity> all = workBookRepository.findAll();
-
         return new ModelAndView("index", "all", all);
     }
-
 
     @GetMapping("index/create")
     public void create(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -54,7 +50,6 @@ public class IndexController {
         generateSheet(saveWb.getId());
         response.sendRedirect("/index/" + saveWb.getId());
     }
-
 
     @GetMapping("/index/{wbId}")
     public ModelAndView index(@PathVariable(value = "wbId") String wbId) {
@@ -69,23 +64,18 @@ public class IndexController {
         } else {
             wb = Owb.get();
         }
-
         return new ModelAndView("websocket", "wb", wb);
     }
 
     @PostMapping("/load/{wbId}")
     public String load(@PathVariable(value = "wbId") String wbId) {
-
         List<WorkSheetEntity> wsList = workSheetRepository.findAllBywbId(wbId);
         List<JSONObject> list = new ArrayList<>();
         wsList.forEach(ws -> {
             list.add(ws.getData());
         });
-
-
         return JSONUtil.toJsonStr(list);
     }
-
 
     @PostMapping("/loadSheet/{wbId}")
     public String loadSheet(@PathVariable(value = "wbId") String wbId) {
@@ -100,7 +90,6 @@ public class IndexController {
         return SheetUtil.getDefaultAllSheetData().toString();
     }
 
-
     private void generateSheet(String wbId) {
         SheetUtil.getDefaultSheetData().forEach(jsonObject -> {
             WorkSheetEntity ws = new WorkSheetEntity();
@@ -110,5 +99,4 @@ public class IndexController {
             workSheetRepository.save(ws);
         });
     }
-
 }

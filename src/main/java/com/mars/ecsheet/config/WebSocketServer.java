@@ -28,8 +28,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServerEndpoint("/ws/{userId}/{gridKey}")
 @Component
 public class WebSocketServer {
+
     static Log log = LogFactory.get(WebSocketServer.class);
     private static WebSocketServer webSocketServer;
+
     /**
      * 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
      */
@@ -54,6 +56,17 @@ public class WebSocketServer {
     @Autowired
     private IMessageProcess messageProcess;
 
+    public static synchronized int getOnlineCount() {
+        return onlineCount;
+    }
+
+    public static synchronized void addOnlineCount() {
+        WebSocketServer.onlineCount++;
+    }
+
+    public static synchronized void subOnlineCount() {
+        WebSocketServer.onlineCount--;
+    }
 
     @PostConstruct //通过@PostConstruct实现初始化bean之前进行的操作
     public void init() {
@@ -77,11 +90,7 @@ public class WebSocketServer {
             webSocketMap.put(gridKey, map);
         }
         addOnlineCount();
-
-
         log.info("用户连接:" + userId + ",打开的表格为：" + gridKey + ",当前在线人数为:" + getOnlineCount());
-
-
     }
 
     /**
@@ -117,9 +126,8 @@ public class WebSocketServer {
                 log.info("用户消息:" + userId + ",报文:" + unMessage);
                 JSONObject jsonObject = JSONUtil.parseObj(unMessage);
                 if (!"mv".equals(jsonObject.getStr("t"))) {
-                        webSocketServer.messageProcess.process(this.gridKey, jsonObject);
+                    webSocketServer.messageProcess.process(this.gridKey, jsonObject);
                 }
-
                 Map<String, WebSocketServer> sessionMap = webSocketMap.get(this.gridKey);
                 if (StrUtil.isNotBlank(unMessage)) {
                     sessionMap.forEach((key, value) -> {
@@ -132,7 +140,7 @@ public class WebSocketServer {
                                     value.sendMessage(JSONUtil.toJsonStr(ResponseDTO.mv(userId, userId, unMessage)));
 
                                     //如果是切换sheet，则不发送信息
-                                } else if(!"shs".equals(jsonObject.getStr("t"))) {
+                                } else if (!"shs".equals(jsonObject.getStr("t"))) {
                                     value.sendMessage(JSONUtil.toJsonStr(ResponseDTO.update(userId, userId, unMessage)));
                                 }
                             } catch (Exception e) {
@@ -162,18 +170,5 @@ public class WebSocketServer {
      */
     public void sendMessage(String message) throws IOException, EncodeException {
         this.session.getAsyncRemote().sendText(message);
-    }
-
-
-    public static synchronized int getOnlineCount() {
-        return onlineCount;
-    }
-
-    public static synchronized void addOnlineCount() {
-        WebSocketServer.onlineCount++;
-    }
-
-    public static synchronized void subOnlineCount() {
-        WebSocketServer.onlineCount--;
     }
 }

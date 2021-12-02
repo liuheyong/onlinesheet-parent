@@ -18,5 +18,9 @@ spring:
         expose-spring-macro-helpers: true
     data:
       mongodb:
-        uri: mongodb://admin:123456@mongo:27017/wb?authSource=admin&readPreference=primary&ssl=false
-
+        host: 192.168.200.169
+        port: 27017
+        database: etable
+        username: admin
+        password: "123456"
+        authentication-database: admin

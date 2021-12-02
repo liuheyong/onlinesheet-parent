@@ -13,14 +13,12 @@ import java.util.List;
  */
 public class SheetUtil {
 
-
     /**
      * 获取sheet的默认option
      *
      * @return
      */
     public static JSONObject getDefautOption() {
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("container", "ecsheet");
         jsonObject.put("title", "ecsheet demo");
@@ -29,7 +27,6 @@ public class SheetUtil {
         jsonObject.put("loadUrl", "");
         jsonObject.put("loadSheetUrl", "");
         jsonObject.put("updateUrl", "");
-
         return jsonObject;
     }
 
@@ -40,7 +37,6 @@ public class SheetUtil {
      */
     public static List<JSONObject> getDefaultSheetData() {
         List<JSONObject> list = new ArrayList<>();
-
         for (int i = 1; i < 4; i++) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("row", 84);
@@ -68,7 +64,6 @@ public class SheetUtil {
      */
     public static JSONObject getDefaultAllSheetData() {
         JSONObject result = new JSONObject();
-
         for (int i = 1; i < 4; i++) {
             JSONObject data = new JSONObject();
             data.put("r", 0);
@@ -87,12 +82,7 @@ public class SheetUtil {
      */
     public static JSONObject buildSheetData(List<JSONObject> data) {
         JSONObject result = new JSONObject();
-        data.forEach((d) -> {
-            result.put(d.get("index").toString(), d.get("celldata"));
-        });
-
+        data.forEach((d) -> result.put(d.get("index").toString(), d.get("celldata")));
         return result;
     }
-
-
 }
