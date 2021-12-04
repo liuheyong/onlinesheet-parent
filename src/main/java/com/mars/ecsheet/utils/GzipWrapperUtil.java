@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -13,11 +14,11 @@ import java.util.zip.GZIPOutputStream;
  * @date 2020/10/28
  * @description
  */
-public class PakoGzipUtils {
+public class GzipWrapperUtil {
 
     /**
      * @param str：正常的字符串
-     * @return 压缩字符串 类型为：  ³)°K,NIc i£_`Çe#  c¦%ÂXHòjyIÅÖ`
+     * @return 压缩字符串
      * @throws IOException
      */
     public static String compress(String str) throws IOException {
@@ -32,7 +33,7 @@ public class PakoGzipUtils {
     }
 
     /**
-     * @param str：类型为：  ³)°K,NIc i£_`Çe#  c¦%ÂXHòjyIÅÖ`
+     * @param str
      * @return 解压字符串  生成正常字符串。
      * @throws IOException
      */
@@ -41,7 +42,7 @@ public class PakoGzipUtils {
             return str;
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ByteArrayInputStream in = new ByteArrayInputStream(str.getBytes("ISO-8859-1"));
+        ByteArrayInputStream in = new ByteArrayInputStream(str.getBytes(StandardCharsets.ISO_8859_1));
         GZIPInputStream gunzip = new GZIPInputStream(in);
         byte[] buffer = new byte[256];
         int n;
@@ -59,8 +60,7 @@ public class PakoGzipUtils {
      */
     public static String unCompressURI(String jsUriStr) throws IOException {
         String gzipCompress = uncompress(jsUriStr);
-        String result = URLDecoder.decode(gzipCompress, "UTF-8");
-        return result;
+        return URLDecoder.decode(gzipCompress, "UTF-8");
     }
 
     /**
@@ -70,7 +70,6 @@ public class PakoGzipUtils {
      */
     public static String compress2URI(String strData) throws IOException {
         String encodeGzip = compress(strData);
-        String jsUriStr = URLEncoder.encode(encodeGzip, "UTF-8");
-        return jsUriStr;
+        return URLEncoder.encode(encodeGzip, "UTF-8");
     }
 }

@@ -42,7 +42,6 @@ public class SheetUtil {
             jsonObject.put("row", 84);
             jsonObject.put("column", 60);
             jsonObject.put("name", "sheet" + i);
-            Integer index = i - 1;
             jsonObject.put("index", IdUtil.simpleUUID());
             jsonObject.put("order", i - 1);
             if (i == 1) {

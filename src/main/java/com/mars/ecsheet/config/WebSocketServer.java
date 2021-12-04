@@ -7,7 +7,7 @@ import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.mars.ecsheet.common.ResponseDTO;
 import com.mars.ecsheet.service.IMessageProcess;
-import com.mars.ecsheet.utils.PakoGzipUtils;
+import com.mars.ecsheet.utils.GzipWrapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,6 @@ import javax.annotation.PostConstruct;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -122,7 +121,7 @@ public class WebSocketServer {
                 if ("rub".equals(message)) {
                     return;
                 }
-                String unMessage = PakoGzipUtils.unCompressURI(message);
+                String unMessage = GzipWrapperUtil.unCompressURI(message);
                 log.info("用户消息:" + userId + ",报文:" + unMessage);
                 JSONObject jsonObject = JSONUtil.parseObj(unMessage);
                 if (!"mv".equals(jsonObject.getStr("t"))) {
@@ -131,7 +130,6 @@ public class WebSocketServer {
                 Map<String, WebSocketServer> sessionMap = webSocketMap.get(this.gridKey);
                 if (StrUtil.isNotBlank(unMessage)) {
                     sessionMap.forEach((key, value) -> {
-
                         //广播到除了发送者外的其它连接端
                         if (!key.equals(this.userId)) {
                             try {
@@ -168,7 +166,7 @@ public class WebSocketServer {
     /**
      * 实现服务器主动推送
      */
-    public void sendMessage(String message) throws IOException, EncodeException {
+    public void sendMessage(String message) {
         this.session.getAsyncRemote().sendText(message);
     }
 }

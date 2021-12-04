@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
     <groupId>com.mars</groupId>
-    <artifactId>onlinesheet-parent</artifactId>
+    <artifactId>onlinesheet-parent1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>onlinesheet</name>
     <description>onlinesheet project for Spring Boot</description>

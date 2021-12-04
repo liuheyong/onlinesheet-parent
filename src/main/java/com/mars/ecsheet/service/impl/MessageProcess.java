@@ -457,7 +457,7 @@ public class MessageProcess implements IMessageProcess {
     /**
      * 切换到指定sheet
      *
-     * @param ws
+     * @param
      * @param message
      * @return
      */
@@ -473,7 +473,7 @@ public class MessageProcess implements IMessageProcess {
     /**
      * sheet属性(隐藏或显示)
      *
-     * @param wbId
+     * @param
      * @param message
      */
     private WorkSheetEntity shRefresh(WorkSheetEntity ws, JSONObject message) {

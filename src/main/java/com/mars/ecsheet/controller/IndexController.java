@@ -41,7 +41,7 @@ public class IndexController {
     }
 
     @GetMapping("index/create")
-    public void create(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void create(HttpServletResponse response) throws IOException {
         WorkBookEntity wb = new WorkBookEntity();
         wb.setName("default");
         wb.setOption(SheetUtil.getDefautOption());
@@ -71,9 +71,7 @@ public class IndexController {
     public String load(@PathVariable(value = "wbId") String wbId) {
         List<WorkSheetEntity> wsList = workSheetRepository.findAllBywbId(wbId);
         List<JSONObject> list = new ArrayList<>();
-        wsList.forEach(ws -> {
-            list.add(ws.getData());
-        });
+        wsList.forEach(ws -> list.add(ws.getData()));
         return JSONUtil.toJsonStr(list);
     }
 
@@ -81,9 +79,7 @@ public class IndexController {
     public String loadSheet(@PathVariable(value = "wbId") String wbId) {
         List<WorkSheetEntity> wsList = workSheetRepository.findAllBywbId(wbId);
         List<JSONObject> list = new ArrayList<>();
-        wsList.forEach(ws -> {
-            list.add(ws.getData());
-        });
+        wsList.forEach(ws -> list.add(ws.getData()));
         if (!list.isEmpty()) {
             return SheetUtil.buildSheetData(list).toString();
         }
