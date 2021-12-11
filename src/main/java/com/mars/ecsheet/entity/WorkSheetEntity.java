@@ -31,5 +31,4 @@ public class WorkSheetEntity implements Serializable {
      * 删除标记,0是未删除，1是删除
      */
     private int deleteStatus;
-
 }

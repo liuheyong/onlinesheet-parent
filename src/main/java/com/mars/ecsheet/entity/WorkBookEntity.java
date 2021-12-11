@@ -26,10 +26,4 @@ public class WorkBookEntity implements Serializable {
     private String name;
 
     private JSONObject option;
-
-    //private Date createdTime;
-    //
-    //private Date modifyTime;
-    //
-    //private List<String> userId;
 }

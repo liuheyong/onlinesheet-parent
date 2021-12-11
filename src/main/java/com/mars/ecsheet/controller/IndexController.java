@@ -3,18 +3,21 @@ package com.mars.ecsheet.controller;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.mars.ecsheet.entity.WorkBookEntity;
+import com.mars.ecsheet.entity.WorkSheet;
 import com.mars.ecsheet.entity.WorkSheetEntity;
 import com.mars.ecsheet.repository.WorkBookRepository;
 import com.mars.ecsheet.repository.WorkSheetRepository;
 import com.mars.ecsheet.utils.SheetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,12 +33,20 @@ import java.util.Optional;
 public class IndexController {
 
     @Autowired
+    private MongoTemplate mongoTemplate;
+    @Autowired
     private WorkBookRepository workBookRepository;
     @Autowired
     private WorkSheetRepository workSheetRepository;
 
     @GetMapping("index")
     public ModelAndView index() {
+        //查询对象
+        Query query = Query.query(new Criteria().andOperator(
+                Criteria.where("fileId").is(89),
+                Criteria.where("deleteStatus").is(0)
+        ));
+        mongoTemplate.findById("61b0540a9735854ed614554e", WorkSheet.class);
         List<WorkBookEntity> all = workBookRepository.findAll();
         return new ModelAndView("index", "all", all);
     }
